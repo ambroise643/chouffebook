@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hall of Fame — Le Panthéon de la clique</title>
+<style>
+:root{--bg:#070d24;--card:#0e1838;--tx:#f5efd8;--mut:#9aa6cf;--acc:#ffd24a;--line:#2a3a78;--soft:#16224f;--gold:linear-gradient(135deg,#fff3b0,#ffd24a 45%,#c98a0a);color-scheme:dark;background:#070d24;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#1d2f7a 0,#0a1233 45%,#050a1c 100%) fixed,var(--bg);color:var(--tx);font:16px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;padding:0 14px 80px}
+h1{font-size:2rem;margin:18px 0 4px;text-align:center;font-family:Georgia,"Times New Roman",serif;letter-spacing:.05em;background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 12px rgba(255,210,74,.5))}
+h2{font-size:.95rem;margin:24px 0 8px;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);text-shadow:0 0 10px rgba(255,210,74,.4)}
+.sub{text-align:center;color:var(--acc);font-size:.85rem;letter-spacing:.25em;text-transform:uppercase;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:linear-gradient(160deg,#16236a,#0b1330);border:1px solid rgba(255,210,74,.4);border-radius:14px;padding:12px;box-shadow:0 0 18px rgba(255,210,74,.1),inset 0 1px 0 rgba(255,255,255,.08)}
+.kpi small{display:block;color:var(--mut);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em}
+.kpi b{display:block;font-size:1.2rem;margin-top:4px;overflow-wrap:anywhere;color:var(--acc);text-shadow:0 0 10px rgba(255,210,74,.45)}
+.kpi span{color:var(--mut);font-size:.8rem}
+.row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .n{flex:1;min-width:0;overflow-wrap:anywhere}
+.row .r{font-weight:700;color:var(--acc);white-space:nowrap}
+.rk{width:34px;text-align:center;flex-shrink:0}
+.mut{color:var(--mut);font-size:.82rem}
+.rec{padding:12px;margin-bottom:10px;cursor:pointer}
+.rec h3{margin:0;font-size:1rem}
+.hist{margin-top:10px;border-top:1px solid var(--line);padding-top:6px;cursor:default}
+button,select,input{font:inherit;color:var(--tx)}
+button{border:1px solid var(--line);background:var(--soft);border-radius:10px;padding:8px 12px;cursor:pointer}
+button.p{background:var(--gold);color:#1a1200;border-color:#ffd24a;font-weight:700}
+button.i{padding:4px 8px}
+button.d{color:#c0392b}
+input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);margin:4px 0 10px}
+label{font-size:.8rem;color:var(--mut)}
+.tm{display:flex;gap:6px;align-items:center}.tm input{text-align:center}.tm span{color:var(--mut);margin-bottom:6px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:6px 0 10px;margin:4px 0 6px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.ctab{white-space:nowrap;flex-shrink:0;border-radius:999px;padding:7px 13px;font-size:.86rem;font-weight:600;border:1px solid var(--line);background:var(--soft);color:var(--mut)}
+.ctab.on{background:var(--gold);color:#1a1200;border-color:#ffd24a;font-weight:700}
+.clk{cursor:pointer}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:#0a1233;border-top:1px solid rgba(255,210,74,.55);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+nav button{flex:1;border:0;border-radius:0;background:none;padding:14px 4px;font-weight:600;color:var(--mut)}
+nav button.on{color:var(--acc)}
+.fab{position:fixed;right:16px;bottom:calc(70px + env(safe-area-inset-bottom,0px));width:54px;height:54px;border-radius:27px;font-size:1.8rem;line-height:1;padding:0;z-index:6;box-shadow:0 0 22px rgba(255,210,74,.65)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.sheet{background:#0b1330;border-top:2px solid var(--acc);width:100%;max-width:520px;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:92%;overflow:auto}
+.acts{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+#toast{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#222;color:#fff;padding:10px 14px;border-radius:10px;z-index:30;display:none;max-width:90%;font-size:.9rem}
+.note{background:var(--soft);border-radius:10px;padding:10px;font-size:.85rem;margin:10px 0}
+</style>
+</head>
+<body>
+<h1>🏆 Hall of Fame</h1>
+<div class="sub">Le Panthéon de la clique</div>
+<div id="note"></div>
+<main id="view"></main>
+<button class="fab p" id="fab" title="Nouveau record">+</button>
+<nav>
+  <button id="t-hof" class="on">🏆 Hall of Fame</button>
+  <button id="t-rec">📋 Records</button>
+  <button id="t-prof">👤 Profils</button>
+</nav>
+<div id="toast"></div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
+import {getFirestore,collection,doc,setDoc,deleteDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
+/* ====== CONFIG FIREBASE ====== */
+const FIREBASE_CONFIG={
+  apiKey:"AIzaSyDXhlF73MDPBxbgg2Rtu9yngB5gU_7H2p8",
+  authDomain:"chouffe-book.firebaseapp.com",
+  projectId:"chouffe-book",
+  storageBucket:"chouffe-book.firebasestorage.app",
+  messagingSenderId:"484723753800",
+  appId:"1:484723753800:web:860698221260ac49e8297d"
+};
+/* ================================================================= */
+function makeDb(){
+  const fs=getFirestore(initializeApp(FIREBASE_CONFIG));
+  const wrap=ref=>({id:ref.id,set:o=>setDoc(ref,o),delete:()=>deleteDoc(ref),
+    onSnapshot:(n,e)=>onSnapshot(ref,x=>n({exists:x.exists(),data:()=>x.data()}),e)});
+  return{collection:p=>({doc:id=>wrap(id?doc(fs,p,id):doc(collection(fs,p))),
+    onSnapshot:(n,e)=>onSnapshot(collection(fs,p),x=>n({docs:x.docs.map(d=>({id:d.id,data:()=>d.data()}))}),e)}),
+    doc:p=>wrap(doc(fs,p))};
+}
+let cats=[];
+const C=()=>cats;
+const ic=f=>(C().find(c=>c.name===f)||{}).icon||"📁";
+const hasCat=f=>C().some(c=>c.name===f);
+const DEF=["PH","Hugo F","Yaël","Xilax","Pol","Jéjé","Hugo D","Gabin A","Gabin F","Yoan","Tom","Ambroise","Laura","Marie","Simon G"];
+let db=null,recs=[],people=null,tab="hof",recCat="all",selProf=DEF[0],st="load",openId=null;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const P=()=>[...DEF,...(people||[]).filter(p=>!DEF.includes(p))];
+const today=()=>new Date().toISOString().slice(0,10);
+const days=d=>Math.max(0,Math.floor((Date.now()-new Date(d+"T12:00:00"))/864e5));
+const fd=d=>new Date(d+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"});
+
+function toast(m){
+  const t=$("#toast");
+  t.textContent=m;
+  t.style.display="block";
+  clearTimeout(toast.h);
+  toast.h=setTimeout(()=>t.style.display="none",3500);
+}
+
+function parseV(s,kind){
+  s=s.trim();
+  if(kind==="free")return s;
+  s=s.replace(",",".");
+  if(kind==="time"){
+    const p=s.split(":");
+    if(!s||p.length>3||p.some(x=>x===""||isNaN(x)))return NaN;
+    return p.reduce((a,x)=>a*60+parseFloat(x),0);
+  }
+  return s===""||isNaN(s)?NaN:parseFloat(s);
+}
+
+function fmtV(v,r){
+  const u=r.unit?" "+esc(r.unit):"";
+  if(r.kind==="time"&&typeof v==="number"){
+    if(v<60)return(+v.toFixed(2))+" s";
+    const h=Math.floor(v/3600),m=Math.floor(v%3600/60),s=v%60;
+    const ss=(s<10?"0":"")+(+s.toFixed(2));
+    return h?h+":"+String(m).padStart(2,"0")+":"+ss:m+":"+ss;
+  }
+  if(typeof v==="number"&&!isNaN(v)){
+    return(+v.toFixed(2)).toLocaleString("fr-FR")+u;
+  }
+  return esc(String(v))+u;
+}
+
+function cmpV(a,b,low){
+  const na=typeof a.v==="number",nb=typeof b.v==="number";
+  if(na&&nb){
+    if(a.v!==b.v)return low?a.v-b.v:b.v-a.v;
+  }else if(na!==nb){
+    return na?-1:1;
+  }else{
+    const c=String(a.v).localeCompare(String(b.v),"fr",{numeric:true,sensitivity:"base"});
+    if(c!==0)return low?c:-c;
+  }
+  return(a.d||"").localeCompare(b.d||"");
+}
+
+function board(r){
+  const m={},low=r.better==="low";
+  for(const e of r.entries||[]){
+    const o=m[e.p];
+    if(!o||cmpV(e,o,low)<0)m[e.p]=e;
+  }
+  return Object.values(m).sort((a,b)=>cmpV(a,b,low));
+}
+
+function stats(){
+  const act=recs.filter(r=>(r.entries||[]).length),champs=act.map(r=>({r,e:board(r)[0]})),cnt={};
+  P().forEach(p=>cnt[p]=0);
+  champs.forEach(c=>cnt[c.e.p]=(cnt[c.e.p]||0)+1);
+  const rank=Object.entries(cnt).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
+  const top=rank.length?rank[0][1]:0;
+  const goat=top?rank.filter(x=>x[1]===top).map(x=>x[0]).join(", "):"—";
+  const all=[];
+  recs.forEach(r=>(r.entries||[]).forEach(e=>all.push({r,e})));
+  all.sort((a,b)=>(b.e.d||"").localeCompare(a.e.d||"")||(b.e.t||0)-(a.e.t||0));
+  let old=null;
+  champs.forEach(c=>{if(!old||(c.e.d||"")<(old.e.d||""))old=c});
+  const fams=C().map(c=>c.name).map(f=>{
+    const cs=champs.filter(c=>c.r.family===f),k={};
+    cs.forEach(c=>k[c.e.p]=(k[c.e.p]||0)+1);
+    const m=Math.max(0,...Object.values(k));
+    return{f,n:cs.length,lead:m?Object.keys(k).filter(p=>k[p]===m).join(", "):"—"};
+  });
+  return{rank,goat,top,all,old,fams,act:act.length,tot:recs.length,cnt};
+}
+
+function hof(){
+  const s=stats(),l=s.all[0];
+  let pos=0,prev=-1;
+  const rk=s.rank.map((x,i)=>{
+    if(x[1]!==prev){pos=i+1;prev=x[1]}
+    const m=x[1]?(["🥇","🥈","🥉"][pos-1]||""):"";
+    return`<div class="row clk" data-goprof="${esc(x[0])}">
+      <div class="rk">${x[1]?(m||pos):"–"}</div>
+      <div class="n">${esc(x[0])}</div>
+      <div class="r">${x[1]}</div>
+    </div>`;
+  }).join("");
+  return`<div class="grid">
+    <div class="card kpi"><small>👑 Le GOAT actuel</small><b>${esc(s.goat)}</b><span>${s.top} record${s.top>1?"s":""}</span></div>
+    <div class="card kpi"><small>🔥 Dernier record</small><b>${l?esc(l.r.title):"—"}</b><span>${l?esc(l.e.p)+" · "+fd(l.e.d):"Rien pour l’instant"}</span></div>
+    <div class="card kpi"><small>🗿 L’intouchable</small><b>${s.old?esc(s.old.r.title):"—"}</b><span>${s.old?days(s.old.e.d).toLocaleString("fr-FR")+" jours · "+esc(s.old.e.p):""}</span></div>
+    <div class="card kpi"><small>📊 Progression</small><b>${s.act} / ${s.tot}</b><span>records établis</span></div>
+  </div>
+  <h2>🏅 Classement général</h2>
+  <div class="card">${rk}${db?'<div class="acts"><button class="i" data-addp="1">+ Ajouter un membre</button></div>':""}</div>
+  <h2>👑 Les rois par catégorie</h2>
+  <div class="card">${s.fams.length?"":'<div class="mut">Aucune catégorie pour l’instant. Crée-en une depuis l’onglet Records.</div>'}${s.fams.map(f=>`<div class="row"><div class="rk">${esc(ic(f.f))}</div><div class="n">${esc(f.f)}<div class="mut">${f.n} actif${f.n>1?"s":""}</div></div><div class="r">${f.n?esc(f.lead):"À conquérir"}</div></div>`).join("")}</div>
+  <h2>⚡ Les 5 derniers exploits</h2>
+  <div class="card">${s.all.slice(0,5).map(x=>`<div class="row"><div class="n"><b>${esc(x.e.p)}</b> · ${esc(x.r.title)}<div class="mut">${fd(x.e.d)}</div></div><div class="r">${fmtV(x.e.v,x.r)}</div></div>`).join("")||'<div class="mut">Aucun exploit pour l’instant.</div>'}</div>`;
+}
+
+function recsView(){
+  const top=db?'<div class="acts" style="margin-top:12px"><button class="i" data-cats="1">🗂️ Gérer les catégories</button></div>':"";
+  const hasUncat=recs.some(r=>!hasCat(r.family));
+  const valid=["all",...C().map(c=>c.name),...(hasUncat?["none"]:[])];
+  if(!valid.includes(recCat))recCat="all";
+
+  const tabItems=[
+    {id:"all",l:"Tous les records"},
+    ...C().map(c=>({id:c.name,l:`${c.icon} ${c.name}`})),
+    ...(hasUncat?[{id:"none",l:"📁 Sans catégorie"}]:[])
+  ];
+  const tabs=`<div class="tabs" id="cat-tabs">${tabItems.map(t=>`<button class="ctab${recCat===t.id?" on":""}" data-cat="${esc(t.id)}">${esc(t.l)}</button>`).join("")}</div>`;
+
+  if(!recs.length)return top+tabs+'<div class="note">Aucun record pour l’instant. Appuie sur + pour créer le premier.</div>';
+
+  const card=r=>{
+    const b=board(r),c=b[0],o=openId===r.id;
+    const sorted=(r.entries||[]).map((e,i)=>({e,i})).sort((a,b)=>cmpV(a.e,b.e,r.better==="low"));
+    return`<div class="card rec" data-id="${r.id}">
+      <h3>${esc(r.title)}</h3>
+      <div class="mut">${r.better==="low"?"Plus bas = meilleur":"Plus haut = meilleur"}</div>
+      <div style="margin-top:6px">${c?`👑 <b>${esc(c.p)}</b> — <b style="color:var(--acc)">${fmtV(c.v,r)}</b> <span class="mut">· ${fd(c.d)}</span>`:'<span class="mut">Pas encore de performance</span>'}</div>
+      ${o?`<div class="hist" data-stop="1">${sorted.map((x,k)=>`<div class="row"><div class="rk">${["🥇","🥈","🥉"][k]||k+1}</div><div class="n">${esc(x.e.p)}<div class="mut">${fd(x.e.d)}</div></div><div class="r">${fmtV(x.e.v,r)}</div><button class="i" data-ed="${r.id}:${x.i}">✏️</button></div>`).join("")}
+      <div class="acts"><button class="d i" data-del="${r.id}">Supprimer le record</button><button class="i" data-edr="${r.id}">✏️ Modifier</button><button class="p" data-add="${r.id}">+ Performance</button></div></div>`:""}
+    </div>`;
+  };
+
+  if(recCat==="all"){
+    const groups=[
+      ...C().map(c=>({f:c.name,i:c.icon,rs:recs.filter(r=>r.family===c.name)})),
+      {f:"Sans catégorie",i:"📁",rs:recs.filter(r=>!hasCat(r.family))}
+    ];
+    return top+tabs+groups.map(({f,i,rs})=>{
+      rs=rs.slice().sort((a,b)=>a.title.localeCompare(b.title));
+      if(!rs.length)return"";
+      return`<h2>${esc(i)} ${esc(f)}</h2>`+rs.map(card).join("");
+    }).join("");
+  }
+
+  const list=(recCat==="none"
+    ?recs.filter(r=>!hasCat(r.family))
+    :recs.filter(r=>r.family===recCat)
+  ).slice().sort((a,b)=>a.title.localeCompare(b.title));
+
+  return top+tabs+(list.length?list.map(card).join(""):'<div class="note">Aucun record dans cette catégorie.</div>');
+}
+
+function profView(){
+  const members=P();
+  if(!members.includes(selProf))selProf=members[0]||"";
+  const s=stats();
+  const tabs=`<div class="tabs" id="prof-tabs">${members.map(p=>`<button class="ctab${selProf===p?" on":""}" data-selprof="${esc(p)}">${esc(p)}${s.cnt[p]?" 👑"+s.cnt[p]:""}</button>`).join("")}${db?'<button class="ctab" data-addp="1">+ Membre</button>':""}</div>`;
+  if(!selProf)return tabs+'<div class="note">Aucun membre.</div>';
+
+  let pos=0,prev=-1,myPos=null;
+  s.rank.forEach((x,i)=>{
+    if(x[1]!==prev){pos=i+1;prev=x[1]}
+    if(x[0]===selProf&&x[1]>0)myPos=pos;
+  });
+
+  const held=[],part=[],hist=[];
+  recs.forEach(r=>{
+    const b=board(r),idx=b.findIndex(e=>e.p===selProf);
+    const mine=(r.entries||[]).map((e,i)=>({e,i})).filter(x=>x.e.p===selProf);
+    mine.forEach(x=>hist.push({r,e:x.e,i:x.i}));
+    if(idx>=0){
+      part.push({r,rk:idx+1,tot:b.length,best:b[idx],lead:b[0],n:mine.length});
+      if(idx===0)held.push({r,best:b[0],sec:b[1]||null});
+    }
+  });
+
+  held.sort((a,b)=>(a.best.d||"").localeCompare(b.best.d||""));
+  part.sort((a,b)=>a.rk-b.rk||a.r.title.localeCompare(b.r.title));
+  hist.sort((a,b)=>(b.e.d||"").localeCompare(a.e.d||"")||(b.e.t||0)-(a.e.t||0));
+
+  const g=held.length,ag=part.filter(x=>x.rk===2).length,br=part.filter(x=>x.rk===3).length,old=held[0]||null;
+
+  return`${tabs}
+  <div class="card">
+    <div class="row" style="padding:0;border:0">
+      <div class="n">
+        <b style="font-size:1.25rem;color:var(--acc)">${esc(selProf)}</b>
+        <div class="mut">🥇 ${g} · 🥈 ${ag} · 🥉 ${br}</div>
+      </div>
+      <div class="r">${myPos?"#"+myPos+" général":"Non classé"}</div>
+    </div>
+  </div>
+  <div class="grid" style="margin-top:10px">
+    <div class="card kpi"><small>👑 Records détenus</small><b>${g}</b><span>${s.act?Math.round(g/s.act*100)+"% des actifs":"0 actif"}</span></div>
+    <div class="card kpi"><small>🏅 Podiums (Top 3)</small><b>${g+ag+br}</b><span>sur ${part.length} épreuve${part.length>1?"s":""}</span></div>
+    <div class="card kpi"><small>🎯 Participations</small><b>${part.length} / ${s.tot}</b><span>${hist.length} essai${hist.length>1?"s":""}</span></div>
+    <div class="card kpi"><small>🗿 Plus vieux règne</small><b>${old?days(old.best.d)+" j":"—"}</b><span>${old?esc(old.r.title):"Aucun titre"}</span></div>
+  </div>
+  <h2>👑 Records détenus (${g})</h2>
+  <div class="card">${held.map(x=>`<div class="row clk" data-gorec="${x.r.id}">
+    <div class="rk">${esc(ic(x.r.family))}</div>
+    <div class="n"><b>${esc(x.r.title)}</b><div class="mut">${fd(x.best.d)} (${days(x.best.d)} j)${x.sec?" · 2e : "+esc(x.sec.p):""}</div></div>
+    <div class="r">${fmtV(x.best.v,x.r)}</div>
+  </div>`).join("")||'<div class="mut">Aucun record détenu pour l’instant.</div>'}</div>
+  <h2>📊 Classement par épreuve (${part.length})</h2>
+  <div class="card">${part.map(x=>`<div class="row clk" data-gorec="${x.r.id}">
+    <div class="rk">${["🥇","🥈","🥉"][x.rk-1]||"#"+x.rk}</div>
+    <div class="n"><b>${esc(x.r.title)}</b> <span class="mut">(${x.rk}/${x.tot})</span><div class="mut">${x.rk===1?"Leader actuel":"Leader : "+esc(x.lead.p)+" ("+fmtV(x.lead.v,x.r)+")"}</div></div>
+    <div class="r">${fmtV(x.best.v,x.r)}</div>
+  </div>`).join("")||'<div class="mut">Aucune performance enregistrée.</div>'}</div>
+  <h2>⚡ Historique (${hist.length})</h2>
+  <div class="card">${hist.slice(0,15).map(x=>`<div class="row">
+    <div class="rk">${esc(ic(x.r.family))}</div>
+    <div class="n"><b>${esc(x.r.title)}</b><div class="mut">${fd(x.e.d)}</div></div>
+    <div class="r">${fmtV(x.e.v,x.r)}</div>
+    ${db?`<button class="i" data-ed="${x.r.id}:${x.i}">✏️</button>`:""}
+  </div>`).join("")||'<div class="mut">Aucun essai enregistré.</div>'}</div>`;
+}
+
+function render(){
+  const cSc=$("#cat-tabs")?$("#cat-tabs").scrollLeft:0;
+  const pSc=$("#prof-tabs")?$("#prof-tabs").scrollLeft:0;
+  $("#t-hof").className=tab==="hof"?"on":"";
+  $("#t-rec").className=tab==="rec"?"on":"";
+  $("#t-prof").className=tab==="prof"?"on":"";
+  $("#fab").style.display=tab==="rec"&&db?"block":"none";
+  $("#note").innerHTML=st==="nodb"?'<div class="note">Connexion à la base impossible : vérifie la config Firebase en haut du fichier.</div>':st==="slow"?'<div class="note">Connexion lente… les données peuvent ne pas être à jour.</div>':"";
+  $("#view").innerHTML=tab==="hof"?hof():tab==="rec"?recsView():profView();
+  if($("#cat-tabs"))$("#cat-tabs").scrollLeft=cSc;
+  if($("#prof-tabs"))$("#prof-tabs").scrollLeft=pSc;
+}
+
+function modal(h){
+  closeM();
+  const o=document.createElement("div");
+  o.className="ov";
+  o.id="ov";
+  o.innerHTML='<div class="sheet">'+h+"</div>";
+  o.addEventListener("click",e=>{if(e.target===o)closeM()});
+  document.body.appendChild(o);
+}
+
+function closeM(){const o=$("#ov");if(o)o.remove()}
+
+async function wr(fn){
+  try{await fn();return true}
+  catch(e){toast("Écriture refusée : vérifie les règles Firestore.");return false}
+}
+
+function entryForm(rid,idx){
+  const r=recs.find(x=>x.id===rid);
+  if(!r)return;
+  const e=idx>=0?r.entries[idx]:null;
+  const defP=e?e.p:(tab==="prof"?selProf:P()[0]);
+  modal(`<h3 style="margin:0 0 8px">${esc(r.title)}</h3>
+  <label>Qui ?</label><select id="fp">${P().map(p=>`<option${defP===p?" selected":""}>${esc(p)}</option>`).join("")}</select>
+  <input id="fn" placeholder="…ou nouveau prénom">
+  ${r.kind==="time"?(()=>{const v=e&&typeof e.v==="number"?e.v:null,h=v!=null?Math.floor(v/3600):"",m=v!=null?Math.floor(v%3600/60):"",sc=v!=null?+(v%60).toFixed(2):"";
+  return`<label>Temps (laisse vide ce qui ne sert pas)</label>
+  <div class="tm"><input id="th" inputmode="numeric" pattern="[0-9]*" placeholder="h" value="${v!=null&&h?h:""}"><span>h</span><input id="tmn" inputmode="numeric" pattern="[0-9]*" placeholder="min" value="${v!=null&&(h||m)?m:""}"><span>min</span><input id="ts" inputmode="decimal" placeholder="s" value="${v!=null?String(sc).replace(".",","):""}"><span>s</span></div>`})()
+  :r.kind==="free"?`<label>Score libre${r.unit?" ("+esc(r.unit)+")":""}</label><input id="fv" type="text" placeholder="Open bar : texte, 3:2, chiffres…" value="${e?esc(e.v):""}">`
+  :`<label>Score${r.unit?" en "+esc(r.unit):""}</label><input id="fv" inputmode="decimal" value="${e?esc(e.v):""}">`}
+  <label>Date</label><input id="fd" type="date" value="${e?e.d:today()}">
+  <div class="acts">${e?'<button class="d" id="fx">Supprimer</button>':""}<button id="fc">Annuler</button><button class="p" id="fs">Enregistrer</button></div>`);
+  $("#fc").onclick=closeM;
+  if(e)$("#fx").onclick=async()=>{
+    if(!confirm("Supprimer cette performance ?"))return;
+    const en=r.entries.filter((_,i)=>i!==idx);
+    if(await wr(()=>db.collection("records").doc(rid).set({...strip(r),entries:en})))closeM();
+  };
+  $("#fs").onclick=async()=>{
+    const nn=$("#fn").value.trim(),p=nn||$("#fp").value,v=r.kind==="time"?readTime():parseV($("#fv").value,r.kind),d=$("#fd").value;
+    const bad=r.kind==="free"?!v:(isNaN(v)||v<0);
+    if(!p||bad||!d)return toast("Vérifie le score et la date.");
+    const en=(r.entries||[]).slice(),ne={p,v,d,t:Date.now()};
+    if(e){ne.t=e.t||ne.t;en[idx]=ne}else en.push(ne);
+    if(nn&&!P().includes(nn)){
+      if(!await wr(()=>db.doc("meta/people").set({list:[...P(),nn]})))return;
+    }
+    if(await wr(()=>db.collection("records").doc(rid).set({...strip(r),entries:en}))){closeM();openId=rid}
+  };
+}
+
+function readTime(){
+  const f=id=>{const x=$(id).value.trim().replace(",",".");return x===""?0:isNaN(x)||+x<0?NaN:parseFloat(x)};
+  if(![$("#th"),$("#tmn"),$("#ts")].some(i=>i.value.trim()))return NaN;
+  return f("#th")*3600+f("#tmn")*60+f("#ts");
+}
+
+function personForm(){
+  modal(`<h3 style="margin:0 0 8px">Ajouter un membre</h3>
+  <label>Prénom</label><input id="pn" placeholder="Ex. Camille">
+  <div class="acts"><button id="pc">Annuler</button><button class="p" id="ps">Ajouter</button></div>`);
+  $("#pn").focus();
+  $("#pc").onclick=closeM;
+  $("#ps").onclick=async()=>{
+    const n=$("#pn").value.trim();
+    if(!n)return toast("Indique un prénom.");
+    if(P().some(p=>p.toLowerCase()===n.toLowerCase()))return toast(n+" est déjà dans la liste.");
+    if(await wr(()=>db.doc("meta/people").set({list:[...P(),n]}))){selProf=n;closeM();toast(n+" a rejoint la clique !")}
+  };
+}
+
+function catForm(){
+  modal(`<h3 style="margin:0 0 8px">Catégories</h3>
+  <div class="card" style="margin-bottom:12px">${C().map((c,i)=>`<div class="row"><div class="rk">${esc(c.icon)}</div><div class="n">${esc(c.name)}<div class="mut">${recs.filter(r=>r.family===c.name).length} record(s)</div></div><button class="i" data-rencat="${i}">✏️</button> <button class="d i" data-delcat="${i}">Supprimer</button></div>`).join("")||'<div class="mut">Aucune catégorie.</div>'}</div>
+  <label>Nouvelle catégorie</label><input id="cn" placeholder="Ex. Sport, Soirée…">
+  <label>Emoji (facultatif)</label><input id="ci" placeholder="🏃" maxlength="8">
+  <div class="acts"><button id="cc">Fermer</button><button class="p" id="cs">Ajouter</button></div>`);
+  $("#cc").onclick=closeM;
+  $("#cs").onclick=async()=>{
+    const name=$("#cn").value.trim(),icon=$("#ci").value.trim()||"📁";
+    if(!name)return toast("Donne un nom à la catégorie.");
+    if(C().some(c=>c.name.toLowerCase()===name.toLowerCase()))return toast("Cette catégorie existe déjà.");
+    if(await wr(()=>db.doc("meta/categories").set({list:[...C(),{name,icon}]}))){cats=[...C(),{name,icon}];catForm()}
+  };
+}
+
+async function delCat(i){
+  const c=C()[i];
+  if(!c)return;
+  const n=recs.filter(r=>r.family===c.name).length;
+  if(!confirm(`Supprimer la catégorie « ${c.name} » ?`+(n?`
+${n} record(s) passeront dans « Sans catégorie ».`:"")))return;
+  const l=C().filter((_,k)=>k!==i);
+  if(await wr(()=>db.doc("meta/categories").set({list:l}))){cats=l;catForm()}
+}
+
+function renCatForm(i){
+  const c=C()[i];
+  if(!c)return;
+  modal(`<h3 style="margin:0 0 8px">Modifier la catégorie</h3>
+  <label>Nom</label><input id="en" value="${esc(c.name)}">
+  <label>Emoji</label><input id="ei" value="${esc(c.icon)}" maxlength="8">
+  <div class="acts"><button id="ec">Retour</button><button class="p" id="es">Enregistrer</button></div>`);
+  $("#ec").onclick=catForm;
+  $("#es").onclick=async()=>{
+    const name=$("#en").value.trim(),icon=$("#ei").value.trim()||"📁";
+    if(!name)return toast("Donne un nom à la catégorie.");
+    if(C().some((x,k)=>k!==i&&x.name.toLowerCase()===name.toLowerCase()))return toast("Cette catégorie existe déjà.");
+    const l=C().map((x,k)=>k===i?{name,icon}:x);
+    if(!await wr(()=>db.doc("meta/categories").set({list:l})))return;
+    cats=l;
+    if(recCat===c.name)recCat=name;
+    if(name!==c.name){
+      const rs=recs.filter(r=>r.family===c.name);
+      if(!await wr(()=>Promise.all(rs.map(r=>db.collection("records").doc(r.id).set({...strip(r),family:name})))))return;
+    }
+    catForm();
+    toast("Catégorie mise à jour.");
+  };
+}
+
+function editRecForm(rid){
+  const r=recs.find(x=>x.id===rid);
+  if(!r)return;
+  modal(`<h3 style="margin:0 0 8px">Modifier le record</h3>
+  <label>Nom du record</label><input id="xt" value="${esc(r.title)}">
+  <label>Catégorie</label><select id="xf">${C().map(c=>`<option value="${esc(c.name)}"${c.name===r.family?" selected":""}>${esc(c.icon)} ${esc(c.name)}</option>`).join("")}<option value=""${hasCat(r.family)?"":" selected"}>Sans catégorie</option></select>
+  <input id="xn" placeholder="…ou nouvelle catégorie">
+  ${r.kind==="time"?"":`<label>Type de score</label><select id="xk"><option value="number"${r.kind!=="free"?" selected":""}>Score (chiffres uniquement)</option><option value="free"${r.kind==="free"?" selected":""}>Libre (open bar : texte, :, chiffres…)</option></select><label>Unité</label><input id="xu" value="${esc(r.unit||"")}">`}
+  <div class="acts"><button id="xc">Annuler</button><button class="p" id="xs">Enregistrer</button></div>`);
+  $("#xc").onclick=closeM;
+  $("#xs").onclick=async()=>{
+    const title=$("#xt").value.trim();
+    if(!title)return toast("Donne un nom au record.");
+    const nc=$("#xn").value.trim();
+    let family=$("#xf").value;
+    if(!family&&!nc&&!hasCat(r.family))family=r.family||"";
+    if(nc){
+      const ex=C().find(c=>c.name.toLowerCase()===nc.toLowerCase());
+      family=ex?ex.name:nc;
+      if(!ex){
+        if(!await wr(()=>db.doc("meta/categories").set({list:[...C(),{name:nc,icon:"📁"}]})))return;
+        cats=[...C(),{name:nc,icon:"📁"}];
+      }
+    }
+    const o={...strip(r),title,family};
+    if(r.kind!=="time"){
+      o.kind=$("#xk").value;
+      o.unit=$("#xu").value.trim();
+    }
+    if(await wr(()=>db.collection("records").doc(rid).set(o))){closeM();openId=rid;toast("Record mis à jour.")}
+  };
+}
+
+function strip(r){const{id,...o}=r;return o}
+
+function recForm(){
+  modal(`<h3 style="margin:0 0 8px">Nouveau record</h3>
+  <label>Nom du record</label><input id="rt" placeholder="Ex. Marathon, Cul sec de Chouffe…">
+  <label>Catégorie</label><select id="rf">${C().map(c=>`<option value="${esc(c.name)}"${recCat===c.name?" selected":""}>${esc(c.icon)} ${esc(c.name)}</option>`).join("")}<option value=""${recCat==="none"?" selected":""}>Sans catégorie</option></select>
+  <input id="rn" placeholder="…ou nouvelle catégorie">
+  <label>Type de score</label><select id="rk"><option value="time">Temps (h:mm:ss)</option><option value="number">Score (chiffres uniquement)</option><option value="free">Libre (open bar : texte, :, chiffres…)</option></select>
+  <label>Unité (pour un score)</label><input id="ru" placeholder="pts, km, verres…">
+  <label>Meilleur score</label><select id="rb"><option value="low">Le plus bas (temps)</option><option value="high">Le plus haut</option></select>
+  <div class="acts"><button id="rc">Annuler</button><button class="p" id="rs">Créer</button></div>`);
+  $("#rk").onchange=e=>{$("#rb").value=e.target.value==="time"?"low":"high"};
+  $("#rc").onclick=closeM;
+  $("#rs").onclick=async()=>{
+    const title=$("#rt").value.trim();
+    if(!title)return toast("Donne un nom au record.");
+    const nc=$("#rn").value.trim();
+    let family=$("#rf").value;
+    if(nc){
+      family=nc;
+      if(!hasCat(nc)&&!await wr(()=>db.doc("meta/categories").set({list:[...C(),{name:nc,icon:"📁"}]})))return;
+    }
+    const ref=db.collection("records").doc(),o={title,family,kind:$("#rk").value,unit:$("#ru").value.trim(),better:$("#rb").value,entries:[]};
+    if(await wr(()=>ref.set(o))){closeM();openId=ref.id;setTimeout(()=>entryForm(ref.id,-1),300)}
+  };
+}
+
+document.addEventListener("click",e=>{
+  const t=e.target;
+  const ct=t.closest("[data-cat]");
+  if(ct){recCat=ct.dataset.cat;render();return}
+  const sp=t.closest("[data-selprof]");
+  if(sp){selProf=sp.dataset.selprof;render();return}
+  const gp=t.closest("[data-goprof]");
+  if(gp){selProf=gp.dataset.goprof;tab="prof";window.scrollTo(0,0);render();return}
+  const gr=t.closest("[data-gorec]");
+  if(gr){openId=gr.dataset.gorec;recCat="all";tab="rec";window.scrollTo(0,0);render();return}
+  if(t.dataset.ed){const[a,b]=t.dataset.ed.split(":");return entryForm(a,+b)}
+  if(t.dataset.cats)return catForm();
+  if(t.dataset.rencat)return renCatForm(+t.dataset.rencat);
+  if(t.dataset.edr)return editRecForm(t.dataset.edr);
+  if(t.dataset.delcat)return delCat(+t.dataset.delcat);
+  if(t.dataset.addp){if(db)personForm();return}
+  if(t.dataset.add)return entryForm(t.dataset.add,-1);
+  if(t.dataset.del){
+    const id=t.dataset.del;
+    if(confirm("Supprimer ce record et tout son historique ?"))wr(()=>db.collection("records").doc(id).delete());
+    return;
+  }
+  if(t.closest("[data-stop]"))return;
+  const c=t.closest(".rec");
+  if(c){openId=openId===c.dataset.id?null:c.dataset.id;render()}
+});
+
+$("#t-hof").onclick=()=>{tab="hof";render()};
+$("#t-rec").onclick=()=>{tab="rec";render()};
+$("#t-prof").onclick=()=>{tab="prof";render()};
+$("#fab").onclick=()=>{if(db)recForm()};
+render();
+
+(async()=>{
+  try{if(!FIREBASE_CONFIG.apiKey.startsWith("COLLE"))db=makeDb()}catch(e){db=null}
+  if(!db){st="nodb";render();return}
+  const tm=setTimeout(()=>{st="slow";render()},10000),ok=()=>{clearTimeout(tm);if(st==="slow"||st==="load"){st="ok";render()}};
+  db.collection("records").onSnapshot(s=>{ok();recs=s.docs.map(d=>({id:d.id,...d.data()}));render()},()=>{clearTimeout(tm);st="nodb";render()});
+  db.doc("meta/categories").onSnapshot(s=>{const l=s.exists?(s.data()||{}).list:null;cats=Array.isArray(l)?l.filter(c=>c&&c.name):[];render()},()=>{});
+  db.doc("meta/people").onSnapshot(s=>{if(s.exists){const l=(s.data()||{}).list;if(Array.isArray(l)&&l.length)people=l}render()},()=>{});
+})();
+</script>
+</body>
+</html>
